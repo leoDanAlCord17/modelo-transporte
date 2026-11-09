@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block titulo %}Asignación{% endblock %}
+{% block contenido %}
+<h1>Modelo de asignación (método húngaro)</h1>
+<p class="intro">
+  Cada fila es un agente (trabajador, máquina…) y cada columna una tarea. Si la matriz no es
+  cuadrada se completa con filas o columnas ficticias de costo 0.
+</p>
+
+<section class="tarjeta" aria-labelledby="titulo-datos-a">
+  <h2 id="titulo-datos-a" class="sr">Datos del problema</h2>
+  <form id="form-asignacion" novalidate>
+    <div class="controles">
+      <div class="campo">
+        <label for="num-filas">N.º de agentes / filas (1–10)</label>
+        <input type="number" id="num-filas" min="1" max="10" value="3" required>
+      </div>
+      <div class="campo">
+        <label for="num-columnas">N.º de tareas / columnas (1–10)</label>
+        <input type="number" id="num-columnas" min="1" max="10" value="3" required>
+      </div>
+      <button type="button" class="btn" id="btn-generar">Generar tabla</button>
+    </div>
+
+    <div class="envoltura-tabla" id="contenedor-tabla"></div>
+
+    <div class="controles">
+      <fieldset class="campo grupo-radio">
+        <legend>Objetivo</legend>
+        <label><input type="radio" name="objetivo" value="min" checked><span>Minimizar costo</span></label>
+        <label><input type="radio" name="objetivo" value="max"><span>Maximizar beneficio</span></label>
+      </fieldset>
+    </div>
+
+    <div id="mensaje-form" class="mensaje mensaje-error" role="alert" hidden></div>
+
+    <div class="botones">
+      <button type="submit" class="btn btn-primario" id="btn-resolver">Resolver</button>
+      <button type="button" class="btn" id="btn-ejemplo">Cargar ejemplo</button>
+      <button type="button" class="btn" id="btn-limpiar">Limpiar</button>
+    </div>
+  </form>
+</section>
+
+<div id="resultados" aria-live="polite"></div>
+{% endblock %}
+{% block scripts %}<script src="/js/asignacion.js"></script>{% endblock %}

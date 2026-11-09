@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block titulo %}Documentación{% endblock %}
+{% block contenido %}
+<h1>Documentación</h1>
+<p class="intro">Guía rápida de uso y referencia de la API JSON. La documentación completa del proyecto está en <code>docs/DOCUMENTACION.md</code> del repositorio.</p>
+
+<article class="tarjeta doc">
+  <nav aria-label="Índice">
+    <ol class="indice">
+      <li><a href="#uso-transporte">Uso: modelo de transporte</a></li>
+      <li><a href="#uso-asignacion">Uso: modelo de asignación</a></li>
+      <li><a href="#reglas">Reglas y desempates</a></li>
+      <li><a href="#api">API JSON</a></li>
+      <li><a href="#errores">Errores</a></li>
+      <li><a href="#local">Ejecución local</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="uso-transporte">Uso: modelo de transporte</h2>
+  <ol>
+    <li>En <a href="/transporte">Transporte</a> indica el número de orígenes y destinos (1–10) y pulsa <strong>Generar tabla</strong>.</li>
+    <li>Escribe los costos unitarios en las celdas, la oferta en la columna derecha y la demanda en la fila inferior. Puedes renombrar orígenes y destinos.</li>
+    <li>Elige el método inicial (Esquina Noroeste, Costo Mínimo o Vogel) y el objetivo (minimizar costo o maximizar beneficio).</li>
+    <li>Pulsa <strong>Resolver</strong>. Verás: la solución inicial y su paso a paso, cada iteración MODI (u, v, costos reducidos, celda entrante y ciclo +/−) y la solución óptima con el plan de envíos.</li>
+    <li><strong>Comparar los 3 métodos</strong> muestra el costo inicial de cada método y cuántas iteraciones MODI necesita para llegar al óptimo.</li>
+  </ol>
+  <p>Si la oferta total no coincide con la demanda total, se agrega automáticamente un origen o destino <strong>ficticio</strong> con costo 0 y se avisa en los resultados.</p>
+
+  <h2 id="uso-asignacion">Uso: modelo de asignación</h2>
+  <ol>
+    <li>En <a href="/asignacion">Asignación</a> indica filas (agentes) y columnas (tareas) y genera la matriz.</li>
+    <li>Escribe los costos (o beneficios, si maximizas) y pulsa <strong>Resolver</strong>.</li>
+    <li>Se muestran las celdas asignadas, el costo total y cada paso del método húngaro: reducción por filas y columnas, cobertura de ceros con el mínimo de líneas y ajustes.</li>
+  </ol>
+
+  <h2 id="reglas">Reglas y desempates</h2>
+  <table>
+    <thead><tr><th>Método</th><th>Regla de desempate</th></tr></thead>
+    <tbody>
+      <tr><td>Costo Mínimo</td><td>Menor costo → mayor cantidad asignable → menor fila → menor columna.</td></tr>
+      <tr><td>Vogel</td><td>Mayor penalización → línea con el menor costo → filas antes que columnas → menor índice. Con una sola fila o columna activa se asigna por costo mínimo.</td></tr>
+      <tr><td>Degeneración</td><td>Si fila y columna se agotan a la vez, solo se tacha la fila; la columna recibe luego una asignación 0 (básica degenerada). Siempre hay m + n − 1 básicas.</td></tr>
+      <tr><td>MODI</td><td>Entra el costo reducido más negativo (empate: menor fila y columna). El ciclo se halla como el camino único en el árbol de celdas básicas. Si varias celdas "−" llegan a 0, sale la primera del ciclo y las demás quedan como básicas con valor 0.</td></tr>
+      <tr><td>Maximización</td><td>Transporte: se minimiza −C. Asignación: se minimiza max(C) − C.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="api">API JSON</h2>
+  <p>Toda la comunicación es JSON (<code>Content-Type: application/json</code>).</p>
+  <h3><code>POST /api/transporte</code></h3>
+<pre><code>{
+  "costos": [[10,2,20,11],[12,7,9,20],[4,14,16,18]],
+  "oferta": [15,25,10],
+  "demanda": [5,15,15,15],
+  "metodo_inicial": "vogel",        // "noroeste" | "costo_minimo" | "vogel"
+  "objetivo": "min",                // "min" | "max"
+  "nombres_origenes": ["S1","S2","S3"],          // opcional
+  "nombres_destinos": ["M1","M2","M3","M4"]      // opcional
+}</code></pre>
+  <p>Respuesta (resumida):</p>
+<pre><code>{
+  "balanceado": true, "ficticio": null,
+  "inicial": { "metodo": "vogel", "asignacion": [[...]], "basicas": [[i,j],...],
+               "costo_total": 475, "pasos": [...] },
+  "optimo":  { "asignacion": [[...]], "costo_total": 435, "envios": [...],
+               "iteraciones": [ { "u": [...], "v": [...], "costos_reducidos": [[...]],
+                                  "celda_entrante": [i,j] | null, "ciclo": [[i,j],...],
+                                  "signos": ["+","-",...], "theta": 5,
+                                  "asignacion_resultante": [[...]], "costo": 435 } ] },
+  "verificacion_scipy": { "costo_total": 435, "coincide": true }
+}</code></pre>
+  <h3><code>POST /api/comparar</code></h3>
+  <p>Mismo cuerpo que <code>/api/transporte</code>. Devuelve <code>{"metodos": [{"metodo", "costo_inicial", "iteraciones", "costo_optimo"}, ...]}</code>.</p>
+  <h3><code>POST /api/asignacion</code></h3>
+<pre><code>{ "costos": [[15,10,9],[9,15,10],[10,12,8]], "objetivo": "min" }
+→ { "asignacion": [[0,1],[1,0],[2,2]], "costo_total": 27, "pasos": [...],
+    "verificacion_scipy": { "costo_total": 27, "coincide": true } }</code></pre>
+
+  <h2 id="errores">Errores</h2>
+  <p>Los datos inválidos (campos vacíos, negativos, dimensiones incorrectas…) devuelven <strong>HTTP 400</strong> con <code>{"error": "mensaje en español"}</code>.</p>
+
+  <h2 id="local">Ejecución local</h2>
+<pre><code>python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements-dev.txt
+python app.py          # http://127.0.0.1:5000
+pytest -v</code></pre>
+</article>
+{% endblock %}

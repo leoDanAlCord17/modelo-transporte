@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Práctica N.º 2 de Investigación de Operaciones: modelo de transporte y de asignación paso a paso.">
+  <title>{% block titulo %}Modelo de Transporte{% endblock %} · Práctica N.º 2</title>
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+  <!-- Estáticos con rutas absolutas: en Vercel se sirven desde public/ -->
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+  <header class="cabecera">
+    <div class="cabecera-interior">
+      <a class="marca" href="/">Modelo de <span>Transporte</span></a>
+      <nav aria-label="Navegación principal">
+        <ul class="nav">
+          <li><a href="/" {% if activa == 'inicio' %}aria-current="page"{% endif %}>Inicio</a></li>
+          <li><a href="/transporte" {% if activa == 'transporte' %}aria-current="page"{% endif %}>Transporte</a></li>
+          <li><a href="/asignacion" {% if activa == 'asignacion' %}aria-current="page"{% endif %}>Asignación</a></li>
+          <li><a href="/documentacion" {% if activa == 'documentacion' %}aria-current="page"{% endif %}>Documentación</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    {% block contenido %}{% endblock %}
+  </main>
+
+  <footer class="pie">
+    Práctica N.º 2 – Investigación de Operaciones · Leo Álvarez · Referencia: H. A. Taha, <em>Investigación de Operaciones</em>, 9.ª ed.
+  </footer>
+
+  <script src="/js/comun.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

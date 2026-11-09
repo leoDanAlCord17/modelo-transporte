@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block titulo %}Transporte{% endblock %}
+{% block contenido %}
+<h1>Modelo de transporte</h1>
+<p class="intro">
+  Indica el número de orígenes y destinos, genera la tabla y completa costos, oferta y demanda.
+  Los nombres de orígenes y destinos son editables.
+</p>
+
+<section class="tarjeta" aria-labelledby="titulo-datos">
+  <h2 id="titulo-datos" class="sr">Datos del problema</h2>
+  <form id="form-transporte" novalidate>
+    <div class="controles">
+      <div class="campo">
+        <label for="num-origenes">N.º de orígenes (1–10)</label>
+        <input type="number" id="num-origenes" min="1" max="10" value="3" required>
+      </div>
+      <div class="campo">
+        <label for="num-destinos">N.º de destinos (1–10)</label>
+        <input type="number" id="num-destinos" min="1" max="10" value="4" required>
+      </div>
+      <button type="button" class="btn" id="btn-generar">Generar tabla</button>
+    </div>
+
+    <div class="envoltura-tabla" id="contenedor-tabla"></div>
+    <p class="ayuda">Celdas: costo unitario c<sub>ij</sub>. Columna derecha: oferta. Fila inferior: demanda. Se admiten decimales.</p>
+
+    <div class="controles">
+      <div class="campo">
+        <label for="metodo-inicial">Método de solución inicial</label>
+        <select id="metodo-inicial">
+          <option value="noroeste">Esquina Noroeste</option>
+          <option value="costo_minimo">Costo Mínimo</option>
+          <option value="vogel" selected>Aproximación de Vogel (VAM)</option>
+        </select>
+      </div>
+      <fieldset class="campo grupo-radio">
+        <legend>Objetivo</legend>
+        <label><input type="radio" name="objetivo" value="min" checked><span>Minimizar costo</span></label>
+        <label><input type="radio" name="objetivo" value="max"><span>Maximizar beneficio</span></label>
+      </fieldset>
+    </div>
+
+    <div id="mensaje-form" class="mensaje mensaje-error" role="alert" hidden></div>
+
+    <div class="botones">
+      <button type="submit" class="btn btn-primario" id="btn-resolver">Resolver</button>
+      <button type="button" class="btn" id="btn-comparar">Comparar los 3 métodos</button>
+      <button type="button" class="btn" id="btn-ejemplo">Cargar ejemplo</button>
+      <button type="button" class="btn" id="btn-limpiar">Limpiar</button>
+    </div>
+  </form>
+</section>
+
+<div id="resultados" aria-live="polite"></div>
+{% endblock %}
+{% block scripts %}<script src="/js/transporte.js"></script>{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block titulo %}Inicio{% endblock %}
+{% block contenido %}
+<section class="tarjeta portada">
+  <h1>Modelo de Transporte y Asignación</h1>
+  <p class="intro">
+    Herramienta didáctica de la <strong>Práctica N.º 2</strong> de Investigación de Operaciones.
+    Introduce los datos de un problema y obtén la solución inicial y la óptima
+    <strong>paso a paso</strong>, siguiendo la notación del libro de Taha.
+  </p>
+  <div class="acciones-portada">
+    <a class="btn btn-primario" href="/transporte">Resolver un problema de transporte</a>
+    <a class="btn" href="/asignacion">Resolver un problema de asignación</a>
+  </div>
+</section>
+
+<h2>Fundamentos teóricos</h2>
+<div class="rejilla">
+  <article class="tarjeta">
+    <h3>Modelo de transporte</h3>
+    <p>
+      Se envían unidades desde <em>m</em> orígenes (oferta a<sub>i</sub>) a <em>n</em> destinos
+      (demanda b<sub>j</sub>) al menor costo total Σ c<sub>ij</sub> x<sub>ij</sub>.
+      Si la oferta total no es igual a la demanda total, se agrega un origen o un destino
+      <strong>ficticio</strong> con costo 0 para balancear el modelo.
+    </p>
+    <p>Una solución básica tiene <strong>m + n − 1</strong> variables básicas.</p>
+  </article>
+  <article class="tarjeta">
+    <h3>Esquina Noroeste</h3>
+    <p>
+      Empieza en la celda superior izquierda, asigna lo máximo posible y avanza hacia abajo o
+      a la derecha según se agote la fila o la columna. Es sencillo, pero ignora los costos.
+    </p>
+  </article>
+  <article class="tarjeta">
+    <h3>Costo Mínimo</h3>
+    <p>
+      En cada paso elige la celda de menor costo entre las no tachadas y le asigna lo máximo
+      posible. Suele dar una solución inicial mejor que la Esquina Noroeste.
+    </p>
+  </article>
+  <article class="tarjeta">
+    <h3>Aproximación de Vogel (VAM)</h3>
+    <p>
+      Calcula una <strong>penalización</strong> por fila y columna (diferencia entre los dos
+      menores costos) y asigna en la celda más barata de la línea con mayor penalización.
+      Normalmente da la mejor solución inicial.
+    </p>
+  </article>
+  <article class="tarjeta">
+    <h3>Método de multiplicadores (MODI)</h3>
+    <p>
+      Con u<sub>1</sub> = 0 se resuelve u<sub>i</sub> + v<sub>j</sub> = c<sub>ij</sub> en las
+      celdas básicas y se calcula d<sub>ij</sub> = c<sub>ij</sub> − u<sub>i</sub> − v<sub>j</sub>
+      en las no básicas. Si algún d<sub>ij</sub> &lt; 0, entra la celda más negativa, se forma el
+      <strong>ciclo</strong> (+/−) y se desplaza θ unidades. Se repite hasta que todos los
+      d<sub>ij</sub> ≥ 0.
+    </p>
+  </article>
+  <article class="tarjeta">
+    <h3>Modelo de asignación y método húngaro</h3>
+    <p>
+      Cada agente se asigna a una sola tarea. El método húngaro reduce filas y columnas, cubre
+      los ceros con el mínimo de líneas y ajusta con el menor elemento no cubierto hasta
+      necesitar <em>n</em> líneas; entonces hay una asignación óptima formada por ceros.
+    </p>
+  </article>
+</div>
+{% endblock %}
