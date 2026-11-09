@@ -5,11 +5,11 @@
 | **Asignatura** | Investigación de Operaciones |
 | **Práctica** | N.º 2 – Modelo de Transporte con Python (Flask + Vercel) |
 | **Estudiante** | Leo Álvarez |
-| **Aplicación desplegada** | [LINK] |
-| **Repositorio** | [LINK] |
+| **Aplicación desplegada** | <https://modelo-transporte-kappa.vercel.app> |
+| **Repositorio** | <https://github.com/leoDanAlCord17/modelo-transporte> |
 | **Referencia** | H. A. Taha, *Investigación de Operaciones*, 9.ª ed., Pearson. |
 
-[CAPTURA: Página de inicio de la aplicación]
+![Página de inicio de la aplicación](capturas/01-inicio.png)
 
 ---
 
@@ -236,7 +236,7 @@ llama al solver y devuelve JSON.
    ```
 2. **Clonar el repositorio** (o descargar el ZIP):
    ```powershell
-   git clone [LINK]
+   git clone https://github.com/leoDanAlCord17/modelo-transporte.git
    cd modelo-transporte
    ```
 3. **Crear el entorno virtual:**
@@ -256,7 +256,7 @@ llama al solver y devuelve JSON.
    ```
    (`requirements.txt` contiene solo lo necesario en producción; `requirements-dev.txt` añade pytest.)
 
-[CAPTURA: Terminal con el entorno virtual activado y pip install completado]
+![Entorno virtual activado e instalación de dependencias](capturas/02-instalacion-venv.png)
 
 ## 7. Configuración
 
@@ -285,7 +285,7 @@ Abrir <http://127.0.0.1:5000>. Para ejecutar las pruebas:
 pytest -v
 ```
 
-[CAPTURA: Terminal con `python app.py` en ejecución]
+![Servidor local en ejecución con python app.py](capturas/03-ejecucion-local.png)
 
 ## 9. Despliegue en Vercel
 
@@ -297,12 +297,13 @@ Vercel detecta Flask sin configuración adicional porque `app.py` en la raíz de
 1. Crear un repositorio vacío en GitHub (sin README).
 2. Subir el proyecto:
    ```powershell
-   git remote add origin https://github.com/<usuario>/modelo-transporte.git
+   git remote add origin https://github.com/leoDanAlCord17/modelo-transporte.git
    git branch -M main
    git push -u origin main
    ```
 3. En <https://vercel.com> → **Add New → Project** → importar el repositorio → **Deploy**.
-4. Copiar la URL `https://<proyecto>.vercel.app`.
+4. Vercel asigna la URL pública: <https://modelo-transporte-kappa.vercel.app>.
+   Cada `git push` a `main` vuelve a desplegar la aplicación automáticamente.
 
 **Opción B – CLI:**
 
@@ -315,10 +316,10 @@ vercel --prod
 **Comprobación tras el despliegue:**
 
 ```bash
-curl -X POST https://<proyecto>.vercel.app/api/transporte \
+curl -X POST https://modelo-transporte-kappa.vercel.app/api/transporte \
   -H "Content-Type: application/json" \
   -d '{"costos":[[10,2,20,11],[12,7,9,20],[4,14,16,18]],"oferta":[15,25,10],"demanda":[5,15,15,15],"metodo_inicial":"vogel"}'
-curl -I https://<proyecto>.vercel.app/css/styles.css      # debe responder 200
+curl -I https://modelo-transporte-kappa.vercel.app/css/styles.css      # debe responder 200
 ```
 
 **Problemas típicos:**
@@ -329,7 +330,7 @@ curl -I https://<proyecto>.vercel.app/css/styles.css      # debe responder 200
 | 404 en `/` | La instancia no se llama `app` o el archivo no es `app.py`. |
 | Error de build | Versiones de `requirements.txt` o `.python-version` incompatibles. |
 
-[CAPTURA: Panel de Vercel con el despliegue en estado Ready]
+![Panel de Vercel con el despliegue en estado Ready](capturas/04-vercel-ready.png)
 
 ## 10. Manual de uso con un ejemplo resuelto
 
@@ -345,7 +346,7 @@ curl -I https://<proyecto>.vercel.app/css/styles.css      # debe responder 200
 
 Si hay campos vacíos, valores no numéricos o negativos, se resaltan en rojo y no se envía nada.
 
-[CAPTURA: Formulario de transporte con el ejemplo cargado]
+![Formulario de transporte con el ejemplo SunRay cargado](capturas/05-formulario-sunray.png)
 
 ### 10.2 Ejemplo resuelto: SunRay Transport (Taha)
 
@@ -414,11 +415,15 @@ Entra x₁₄ (d = −4). Ciclo: **+**(1,4) → **−**(2,4) → **+**(2,2) → 
 > **435**, que es el valor que publica el libro de Taha para este ejemplo. Por eso se usa 435
 > en las pruebas.
 
-[CAPTURA: Resumen de resultados con la verificación de scipy en verde]
-[CAPTURA: Paso a paso del método de Vogel con las penalizaciones]
-[CAPTURA: Iteración MODI con el ciclo + / − dibujado]
-[CAPTURA: Solución óptima y plan de envíos]
-[CAPTURA: Tabla comparativa de los tres métodos]
+![Resumen de resultados con la verificación de scipy en verde](capturas/06-resumen-scipy.png)
+
+![Paso a paso del método de Vogel con las penalizaciones](capturas/07-vogel-paso-a-paso.png)
+
+![Iteración MODI con el ciclo + / − dibujado](capturas/08-modi-ciclo.png)
+
+![Solución óptima y plan de envíos](capturas/09-solucion-optima.png)
+
+![Tabla comparativa de los tres métodos iniciales](capturas/10-comparacion-metodos.png)
 
 ### 10.3 Problemas no balanceados
 
@@ -426,7 +431,7 @@ Si la oferta total es mayor que la demanda, aparece un aviso y una columna **Fic
 "envía" a ella es la oferta que no se usa. Si la demanda es mayor, aparece una fila **Ficticio** y
 lo asignado desde ella es demanda no satisfecha.
 
-[CAPTURA: Aviso de problema no balanceado con destino ficticio]
+![Aviso de problema no balanceado con destino ficticio](capturas/11-no-balanceado.png)
 
 ### 10.4 Ejemplo de asignación (Taha)
 
@@ -445,8 +450,9 @@ Tres niños (Juan, Karen, Terri) y tres tareas (podar, pintar, lavar autos):
 **Asignación óptima:** Juan → Pintar (10), Karen → Podar (9), Terri → Lavar (8). **Costo = 27**,
 igual que `linear_sum_assignment`.
 
-[CAPTURA: Resultado del método húngaro con las celdas asignadas resaltadas]
-[CAPTURA: Paso a paso del método húngaro con las líneas de cobertura]
+![Resultado del método húngaro con las celdas asignadas resaltadas](capturas/12-hungaro-resultado.png)
+
+![Paso a paso del método húngaro con las líneas de cobertura](capturas/13-hungaro-pasos.png)
 
 ## 11. API JSON
 
@@ -510,7 +516,7 @@ y `verificacion_scipy`.
 
 Las pruebas se ejecutan con `pytest -v`. Resultado: **97 pruebas superadas, 0 fallidas**.
 
-[CAPTURA: Salida de `pytest -v` con todas las pruebas superadas]
+![Salida de pytest -v con todas las pruebas superadas](capturas/14-pytest.png)
 
 | Archivo | N.º | Qué verifica |
 |---|:-:|---|
@@ -544,6 +550,24 @@ Las pruebas se ejecutan con `pytest -v`. Resultado: **97 pruebas superadas, 0 fa
 
 Además, en cada iteración de MODI se comprueba que las celdas básicas sigan formando un árbol de
 m + n − 1 celdas y que la solución respete oferta, demanda y no negatividad.
+
+### 12.1 Pruebas en producción
+
+Pruebas manuales realizadas sobre la aplicación desplegada en
+<https://modelo-transporte-kappa.vercel.app> (noviembre de 2026).
+
+| Caso | Acción | Resultado esperado | Resultado obtenido |
+|---|---|---|---|
+| SunRay – Esquina Noroeste | Cargar ejemplo, método Esquina NO, Resolver | Inicial 520, óptimo 435 | 520 → 435, coincide con scipy ✔ |
+| SunRay – Costo Mínimo | Cargar ejemplo, método Costo Mínimo, Resolver | Inicial 475, óptimo 435 | 475 → 435, coincide con scipy ✔ |
+| SunRay – Vogel | Cargar ejemplo, método Vogel, Resolver | Inicial 475, óptimo 435 | 475 → 435, coincide con scipy ✔ |
+| Comparación de métodos | Cargar ejemplo, «Comparar los 3 métodos» | Tabla 520 / 475 / 475, óptimo 435 en los tres | Correcto ✔ |
+| Asignación (Taha) | Asignación → Cargar ejemplo → Resolver | Costo 27 | 27, coincide con scipy ✔ |
+| Problema no balanceado | Oferta total ≠ demanda total | Aviso y origen/destino ficticio correcto | Ficticio correcto, coincide con scipy ✔ |
+| Maximización | Objetivo «Maximizar beneficio» | Óptimo igual al de scipy | Coincide con scipy ✔ |
+| Entradas inválidas | Valores negativos o campos vacíos enviados a la API | HTTP 400 con mensaje en español | HTTP 400 con mensaje en español ✔ |
+| Archivos estáticos | Abrir `/css/styles.css` y `/js/transporte.js` | HTTP 200 desde la CDN de Vercel | HTTP 200 ✔ |
+| Consola del navegador | Revisar la consola durante todas las pruebas | Sin errores | Sin errores ✔ |
 
 ## 13. Conclusiones
 

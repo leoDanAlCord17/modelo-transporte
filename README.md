@@ -1,7 +1,8 @@
 # Modelo de Transporte con Python (Flask + Vercel)
 
 **Práctica N.º 2 – Investigación de Operaciones** · Estudiante: **Leo Álvarez**
-**Aplicación:** [LINK]
+**Aplicación:** <https://modelo-transporte-kappa.vercel.app>
+**Repositorio:** <https://github.com/leoDanAlCord17/modelo-transporte>
 
 Aplicación web que resuelve el **modelo de transporte** y el **modelo de asignación** mostrando el
 **paso a paso**, con la notación del libro de Taha (*Investigación de Operaciones*, 9.ª ed.).
@@ -22,6 +23,8 @@ Aplicación web que resuelve el **modelo de transporte** y el **modelo de asigna
 ## Inicio rápido
 
 ```powershell
+git clone https://github.com/leoDanAlCord17/modelo-transporte.git
+cd modelo-transporte
 python -m venv .venv
 .venv\Scripts\activate            # macOS/Linux: source .venv/bin/activate
 pip install -r requirements-dev.txt
