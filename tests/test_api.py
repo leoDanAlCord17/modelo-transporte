@@ -28,6 +28,19 @@ def test_estaticos_locales(cliente):
     assert cliente.get("/js/asignacion.js").status_code == 200
 
 
+def test_en_vercel_no_se_registra_ruta_de_estaticos():
+    """Con la variable VERCEL definida, Flask no sirve public/ (lo hace la CDN)."""
+    import os
+    import subprocess
+    import sys
+    codigo = ("import app; print(any(r.endpoint == 'estaticos_locales' "
+              "for r in app.app.url_map.iter_rules()), app.app.static_folder)")
+    raiz = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    salida = subprocess.run([sys.executable, "-c", codigo], cwd=raiz, capture_output=True,
+                            text=True, env={**os.environ, "VERCEL": "1"}, check=True)
+    assert salida.stdout.split() == ["False", "None"]
+
+
 def test_404_pagina(cliente):
     assert cliente.get("/no-existe").status_code == 404
 

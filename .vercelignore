@@ -1,0 +1,6 @@
+# Archivos que no se suben al desplegar con la CLI de Vercel
+.venv/
+__pycache__/
+.pytest_cache/
+.claude/
+.vscode/
