@@ -410,11 +410,6 @@ Entra x₁₄ (d = −4). Ciclo: **+**(1,4) → **−**(2,4) → **+**(2,2) → 
 | Costo Mínimo | 475 | 1 | 435 |
 | Vogel | 475 | 1 | 435 |
 
-> **Nota sobre el valor óptimo.** El enunciado de la práctica indicaba 315 como óptimo esperado.
-> Tanto el método MODI (desde los tres métodos iniciales) como `scipy.optimize.linprog` dan
-> **435**, que es el valor que publica el libro de Taha para este ejemplo. Por eso se usa 435
-> en las pruebas.
-
 ![Resumen de resultados con la verificación de scipy en verde](capturas/06-resumen-scipy.png)
 
 ![Paso a paso del método de Vogel con las penalizaciones](capturas/07-vogel-paso-a-paso.png)
